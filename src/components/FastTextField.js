@@ -4,7 +4,7 @@ import { TextField } from "@mui/material";
 
 const FastTextField = (props) => {
   const { setState } = useContext(InputContext);
-  const { label, value, type, onBlur, index, error, helperText } = props;
+  const { index, inputObject, validator } = props;
 
   return useMemo(() => {
     const handleChange = (e) => {
@@ -15,21 +15,37 @@ const FastTextField = (props) => {
       });
     };
 
-    //console.log("FastTextField Rendered");
     return (
       <TextField
-        error={error}
-        helperText={helperText}
-        sx={{ margin: 1 }}
-        variant="standard"
-        label={label}
-        value={value}
-        type={type}
-        onBlur={onBlur}
+        name={inputObject.name}
+        error={Boolean(
+          validator.current.message(
+            inputObject.name,
+            inputObject.value,
+            "required|alpha"
+          )
+        )}
+        helperText={validator.current.message(
+          inputObject.name,
+          inputObject.value,
+          "required|alpha"
+        )}
+        variant="outlined"
+        label={inputObject.name.toUpperCase()}
+        value={inputObject.value}
+        type={inputObject.textType}
         onChange={handleChange}
+        onBlur={() => validator.current.showMessageFor(inputObject.name)}
       />
     );
-  }, [error, helperText, label, value, type, onBlur, setState, index]);
+  }, [
+    validator,
+    inputObject.name,
+    inputObject.value,
+    inputObject.textType,
+    setState,
+    index,
+  ]);
 };
 
 export default FastTextField;

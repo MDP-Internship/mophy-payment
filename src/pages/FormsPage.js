@@ -8,6 +8,7 @@ import FastTextField from "../components/FastTextField";
 import FastMultipleSelect from "../components/FastMultipleSelect";
 import FastRadio from "../components/FastRadio";
 import FastCheckbox from "../components/FastCheckBox";
+import FastDatePicker from "../components/FastDatePicker";
 
 import SimpleReactValidator from "simple-react-validator";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,15 +33,13 @@ const FormsPage = () => {
     console.log(validator.current);
   };
 
-  //console.log(state);
-
   return (
     <PageStyle>
       <Form onSubmit={handleSubmit}>
         {state.map((inputObject, index) => {
           return (
             <React.Fragment key={inputObject._id}>
-              {InputSwitch(inputObject, index)}
+              {InputSwitch(inputObject, index, validator)}
             </React.Fragment>
           );
         })}
@@ -76,20 +75,15 @@ const InputContainer = styled.div`
   justify-content: center;
 `;
 
-const InputSwitch = (inputObject, index) => {
+const InputSwitch = (inputObject, index, validator) => {
   if (inputObject.type === "Text") {
+    validator.current.message(inputObject.name, inputObject.value, "required");
     return (
       <InputContainer>
         <FastTextField
-          helperText={validator.current.message(
-            inputObject.name,
-            inputObject.value,
-            "required|alpha"
-          )}
-          label={inputObject.name.toUpperCase()}
-          value={inputObject.value}
           index={index}
-          type={inputObject.textType}
+          inputObject={inputObject}
+          validator={validator}
         />
       </InputContainer>
     );
@@ -97,10 +91,9 @@ const InputSwitch = (inputObject, index) => {
     return (
       <InputContainer>
         <FastMultipleSelect
-          label={inputObject.name.toUpperCase()}
-          value={inputObject.value}
           index={index}
-          options={inputObject.options}
+          inputObject={inputObject}
+          validator={validator}
         />
       </InputContainer>
     );
@@ -108,21 +101,27 @@ const InputSwitch = (inputObject, index) => {
     return (
       <InputContainer strech>
         <FastRadio
-          label={inputObject.name.toUpperCase()}
-          value={inputObject.value}
           index={index}
-          options={inputObject.options}
+          inputObject={inputObject}
+          validator={validator}
         />
       </InputContainer>
     );
   } else if (inputObject.type === "Checkbox") {
+    validator.current.message(inputObject.name, inputObject.value, "accepted");
     return (
       <InputContainer strech>
         <FastCheckbox
-          label={inputObject.name.toUpperCase()}
-          value={inputObject.value}
           index={index}
+          inputObject={inputObject}
+          validator={validator}
         />
+      </InputContainer>
+    );
+  } else if (inputObject.type === "Date") {
+    return (
+      <InputContainer>
+        <FastDatePicker index={index} inputObject={inputObject} />
       </InputContainer>
     );
   } else {

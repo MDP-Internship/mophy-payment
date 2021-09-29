@@ -4,7 +4,7 @@ import { FormControlLabel, Checkbox } from "@mui/material";
 
 const FastCheckbox = (props) => {
   const { setState } = useContext(InputContext);
-  const { label, value, index } = props;
+  const { index, inputObject } = props;
 
   return useMemo(() => {
     const handleChange = (e) => {
@@ -14,14 +14,16 @@ const FastCheckbox = (props) => {
         return array;
       });
     };
-    //console.log("FastCheckbox Rendered");
+    console.log("FastCheckbox Rendered");
     return (
       <FormControlLabel
-        control={<Checkbox checked={value} onChange={handleChange} />}
-        label={label}
+        control={
+          <Checkbox checked={inputObject.value} onChange={handleChange} />
+        }
+        label={inputObject.name.toUpperCase()}
       />
     );
-  }, [index, label, setState, value]);
+  }, [inputObject.name, inputObject.value, setState, index]);
 };
 
 export default FastCheckbox;

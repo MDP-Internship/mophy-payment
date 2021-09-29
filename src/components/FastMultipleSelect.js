@@ -12,7 +12,7 @@ import {
 
 const FastMultipleSelect = (props) => {
   const { setState } = useContext(InputContext);
-  const { value, options, index, label } = props;
+  const { index, inputObject } = props;
 
   return useMemo(() => {
     const handleChange = (e) => {
@@ -22,15 +22,15 @@ const FastMultipleSelect = (props) => {
         return array;
       });
     };
-    //console.log("FastMultipleSelect Rendered");
+    console.log("FastMultipleSelect Rendered");
     return (
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel>{label}</InputLabel>
+        <InputLabel>{inputObject.name.toUpperCase()}</InputLabel>
         <Select
           multiple
-          value={value}
+          value={inputObject.value}
           onChange={handleChange}
-          input={<OutlinedInput label={label} />}
+          input={<OutlinedInput label={inputObject.name.toUpperCase()} />}
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((value) => (
@@ -39,7 +39,7 @@ const FastMultipleSelect = (props) => {
             </Box>
           )}
         >
-          {options.map((option, index) => (
+          {inputObject.options.map((option, index) => (
             <MenuItem key={index} value={option}>
               {option}
             </MenuItem>
@@ -47,7 +47,13 @@ const FastMultipleSelect = (props) => {
         </Select>
       </FormControl>
     );
-  }, [index, label, options, setState, value]);
+  }, [
+    index,
+    inputObject.name,
+    inputObject.options,
+    inputObject.value,
+    setState,
+  ]);
 };
 
 export default FastMultipleSelect;

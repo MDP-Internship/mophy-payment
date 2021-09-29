@@ -4,7 +4,7 @@ import { RadioGroup, FormLabel, FormControlLabel, Radio } from "@mui/material";
 
 const FastRadio = (props) => {
   const { setState } = useContext(InputContext);
-  const { value, index, options, label } = props;
+  const { index, inputObject } = props;
 
   return useMemo(() => {
     const handleChange = (e) => {
@@ -14,9 +14,9 @@ const FastRadio = (props) => {
         return array;
       });
     };
-    //console.log("FastRadio Rendered");
+    console.log("FastRadio Rendered");
     return (
-      <RadioGroup row value={value} onChange={handleChange}>
+      <RadioGroup row value={inputObject.value} onChange={handleChange}>
         <FormLabel
           sx={{
             marginRight: 2,
@@ -24,9 +24,9 @@ const FastRadio = (props) => {
           }}
           component="legend"
         >
-          {label}
+          {inputObject.name.toUpperCase()}
         </FormLabel>
-        {options.map((option, index) => {
+        {inputObject.options.map((option, index) => {
           return (
             <FormControlLabel
               key={index}
@@ -38,7 +38,13 @@ const FastRadio = (props) => {
         })}
       </RadioGroup>
     );
-  }, [index, label, options, setState, value]);
+  }, [
+    index,
+    inputObject.name,
+    inputObject.options,
+    inputObject.value,
+    setState,
+  ]);
 };
 
 export default FastRadio;
